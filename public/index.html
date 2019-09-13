@@ -1,0 +1,60 @@
+<html>
+
+<head>
+  <title>FILE SHARING APP</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="shortcut icon" href="">
+</head>
+
+<body>
+  <div class="container-div">
+    <h1>FILE SHARING APP</h1>
+    <div class="form-div">
+      <!-- <form action="">
+        <input id="message" autocomplete="off" autofocus=true/><button>Send</button>
+      </form> -->
+      <form action="/" method="post" enctype="multipart/form-data" name="uploadForm">
+        <input type="file" name="avatar" id="fileName" required>
+        <button type="submit">Submit</button>
+      </form>
+      <button onclick="fetchFile()">Show Available files</button>
+      <ul id="messages">
+      </ul>
+    </div>
+  </div>
+  <script>
+    function fetchFile() {
+      var i = 0;
+      fetch("/api").then(res => {
+        return res.json();
+      }).then(data => {
+        // console.log(data.data);
+        if (data.data) {
+          data.data.map(filenames => {
+            console.log(filenames.fileName);
+            var inp = document.createElement('input');
+            var li = document.createElement('li');
+            var form = document.createElement('form');
+            form.setAttribute('action', '/files');
+            form.setAttribute('method', 'post');
+            form.setAttribute('id', 'download' + i);
+            inp.setAttribute('readonly', 'true');
+            inp.setAttribute('name', 'fileToDownload');
+            inp.setAttribute('id', 'download');
+            var button = document.createElement('button');
+            button.innerText = 'Download';
+            button.setAttribute("id", "btnid");
+            button.setAttribute("type", "text");
+            inp.value = filenames.fileName;
+            document.querySelector("ul#messages").appendChild(li).appendChild(form).appendChild(inp);
+            document.querySelector("form#download" + i).appendChild(button);
+            i += 1;
+          })
+        }
+      })
+    }
+  </script>
+</body>
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+
+</html>
